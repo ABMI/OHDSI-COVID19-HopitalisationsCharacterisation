@@ -346,6 +346,14 @@ comparativeCharacterization <- function(connectionDetails,
                            percentDigits = 1, 
                            valueDigits = 1,
                            stdDiffDigits = 2)
+    
+    countNum <- as.numeric(gsub(",","",as.character(table1$Count)))
+    smallCellIndex <- which(((countNum < minCellCount) & (countNum > 0)) & (!is.na(countNum)))
+    if(length(smallCellIndex) > 0){
+      table1[smallCellIndex, 2] <- sprintf("< %d", minCellCount)
+      table1[smallCellIndex, 3] <- NA
+    }
+    
     if(!is.null(fileName)){
       write.csv(table1,fileName)
       ParallelLogger::logInfo(sprintf("Table 1 is saved in %s", fileName))
